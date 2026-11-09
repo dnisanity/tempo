@@ -1,0 +1,152 @@
+.panel {
+  min-width: 0;
+  padding: 25px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  @media (max-width: 700px) {
+    padding: 20px;
+  }
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.eyebrow {
+  margin: 0 0 7px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.title {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 19px;
+  letter-spacing: -0.5px;
+}
+
+.count {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #f1f4f1;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.emptyState {
+  min-height: 205px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: #f3f5f3;
+  color: var(--accent);
+  font-size: 25px;
+}
+
+.emptyTitle {
+  margin: 0 0 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.emptyDescription {
+  max-width: 230px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.info {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    color: var(--muted);
+    font-size: 11px;
+  }
+}
+
+.duration {
+  color: #596b5c;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.deleteButton {
+  width: 25px;
+  height: 25px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #a0a8b1;
+  font-size: 19px;
+
+  &:hover {
+    background: #f8eeee;
+    color: #c45c5c;
+  }
+}
