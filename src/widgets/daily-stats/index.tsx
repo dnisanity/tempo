@@ -1,4 +1,4 @@
-import { formatDuration } from "../../utils";
+import { formatDuration } from "../../shared/utils";
 import s from "./style.module.css";
 
 interface Props {

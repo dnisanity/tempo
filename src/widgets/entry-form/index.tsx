@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
-import { CATEGORIES } from "../../constants";
-import type { Category } from "../../types";
+import { CATEGORIES } from "../../shared/constants";
+import type { Category } from "../../shared/types";
 
 import s from "./style.module.css";
 

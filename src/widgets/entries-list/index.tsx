@@ -1,6 +1,6 @@
-import type { Entry } from "../../types";
-import { CATEGORIES } from "../../constants";
-import { formatDuration } from "../../utils";
+import type { Entry } from "../../shared/types";
+import { CATEGORIES } from "../../shared/constants";
+import { formatDuration } from "../../shared/utils";
 
 import s from "./style.module.css";
 

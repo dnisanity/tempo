@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDate } from "../../utils";
+import { formatDate } from "../../shared/utils";
 
 import s from "./style.module.css";
 

@@ -1,4 +1,4 @@
-import { Dashboard } from "./components";
+import { Dashboard } from "../widgets";
 import "./globals.css";
 
 export default function Page() {

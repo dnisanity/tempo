@@ -1,0 +1,12 @@
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 16px;
+}
+
+@media (max-width: 700px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}
