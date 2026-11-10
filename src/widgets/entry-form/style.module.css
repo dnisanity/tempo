@@ -107,7 +107,10 @@
   background: #fff;
   color: var(--text);
   padding: 0 10px;
+  font-family: var(--font-ui);
   font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
   outline: none;
 }
 
@@ -118,6 +121,8 @@
 
 .field::placeholder {
   color: #b0b7c0;
+  font-family: var(--font-ui);
+  font-weight: 500;
 }
 
 .submitButton,

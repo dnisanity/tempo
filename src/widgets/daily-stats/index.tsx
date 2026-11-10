@@ -11,10 +11,10 @@ interface CategoryBreakdownItem {
 interface Props {
   totalMinutes: number;
   entriesCount: number;
-  categoryBreakdown: CategoryBreakdownItem[];
+  categoryBreakdown: (CategoryBreakdownItem & {
+    delta?: number;
+  })[];
   periodLabel: string;
-  comparisonDelta: number;
-  comparisonPercent: number;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -25,13 +25,24 @@ const CATEGORY_COLORS: Record<string, string> = {
   household: "#d7c7b3",
 };
 
+function formatDeltaLabel(delta: number) {
+  if (delta === 0) return "0";
+
+  const absolute = Math.abs(delta);
+  const hours = Math.floor(absolute / 60);
+  const minutes = absolute % 60;
+
+  if (hours === 0) return `${delta > 0 ? "+" : "-"}${minutes} мин`;
+  if (minutes === 0) return `${delta > 0 ? "+" : "-"}${hours} ч`;
+
+  return `${delta > 0 ? "+" : "-"}${hours} ч ${minutes} мин`;
+}
+
 export const DailyStats = ({
   totalMinutes,
   entriesCount,
   categoryBreakdown,
   periodLabel,
-  comparisonDelta,
-  comparisonPercent,
 }: Props) => {
   const topCategory = categoryBreakdown[0];
   const donutGradient =
@@ -69,23 +80,6 @@ export const DailyStats = ({
         <span className={s.hint}>активных</span>
       </div>
 
-      <div className={s.card}>
-        <span className={s.label}>Сравнение</span>
-        <strong
-          className={`${s.value} ${comparisonDelta >= 0 ? s.positive : s.negative}`}
-        >
-          {comparisonDelta >= 0 ? "+" : "-"}
-          {Math.abs(Math.round(comparisonPercent))}%
-        </strong>
-        <span className={s.hint}>
-          {comparisonDelta === 0
-            ? "как обычно"
-            : comparisonDelta > 0
-              ? "выше прошлого периода"
-              : "ниже прошлого периода"}
-        </span>
-      </div>
-
       <div className={s.donutBlock}>
         <div className={s.donutWrap}>
           <div
@@ -109,6 +103,7 @@ export const DailyStats = ({
         ) : (
           categoryBreakdown.map((category) => {
             const color = CATEGORY_COLORS[category.id] ?? "#c7cfca";
+            const delta = category.delta ?? 0;
 
             return (
               <div key={category.id} className={s.breakdownRow}>
@@ -120,7 +115,15 @@ export const DailyStats = ({
                     />
                     {category.label}
                   </span>
-                  <strong>{formatDuration(category.minutes)}</strong>
+
+                  <div className={s.metaValueWrap}>
+                    <strong>{formatDuration(category.minutes)}</strong>
+                    <span
+                      className={`${s.deltaChip} ${delta >= 0 ? s.positive : s.negative}`}
+                    >
+                      {formatDeltaLabel(delta)}
+                    </span>
+                  </div>
                 </div>
 
                 <div className={s.barTrack}>

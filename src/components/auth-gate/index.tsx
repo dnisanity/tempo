@@ -105,8 +105,11 @@ export function AuthGate() {
 
   if (isLoading) {
     return (
-      <div className={s.authCard}>
-        <p>Загрузка...</p>
+      <div className={s.authWrap}>
+        <div className={s.loadingCard}>
+          <span className={s.loader} aria-hidden="true" />
+          <p>Загрузка...</p>
+        </div>
       </div>
     );
   }

@@ -91,6 +91,7 @@ export const EntriesList = ({
             const category = CATEGORIES.find(
               (item) => item.id === entry.category,
             );
+            const entryLabel = entry.activity || category?.label || "Запись";
 
             if (editingId === entry.id) {
               return (
@@ -100,7 +101,7 @@ export const EntriesList = ({
                   onSubmit={(event) => {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
-                    const activity = String(
+                    const rawActivity = String(
                       formData.get("activity") ?? entry.activity,
                     ).trim();
                     const rawMinutes = Number(
@@ -140,9 +141,15 @@ export const EntriesList = ({
                           ? rawMinutes
                           : 0;
 
-                    if (!activity || !date || minutes <= 0) {
+                    if (!date || minutes <= 0) {
                       return;
                     }
+
+                    const activity =
+                      rawActivity ||
+                      CATEGORIES.find((item) => item.id === categoryValue)
+                        ?.label ||
+                      "Активность";
 
                     onEdit(
                       entry.id,
@@ -156,60 +163,75 @@ export const EntriesList = ({
                     setEditingId(null);
                   }}
                 >
-                  <input
-                    className={s.editInput}
-                    name="activity"
-                    defaultValue={entry.activity}
-                    placeholder="Что делал?"
-                    required
-                  />
+                  <label className={s.field}>
+                    <input
+                      className={s.editInput}
+                      name="activity"
+                      defaultValue={entry.activity}
+                      placeholder="Что делал?"
+                    />
+                  </label>
 
                   <div className={s.editGrid}>
-                    <input
-                      className={s.editInput}
-                      name="minutes"
-                      type="number"
-                      min="1"
-                      defaultValue={entry.minutes}
-                      placeholder="мин"
-                    />
+                    <label className={s.field}>
+                      <input
+                        className={s.editInput}
+                        name="minutes"
+                        type="number"
+                        min="1"
+                        defaultValue={entry.minutes}
+                        placeholder="мин"
+                      />
+                    </label>
 
-                    <input
-                      className={s.editInput}
-                      name="date"
-                      type="date"
-                      defaultValue={formatDateInputValue(new Date(entry.date))}
-                      required
-                    />
+                    <label className={s.field}>
+                      <input
+                        className={s.editInput}
+                        name="date"
+                        type="date"
+                        defaultValue={formatDateInputValue(
+                          new Date(entry.date),
+                        )}
+                        required
+                      />
+                    </label>
 
-                    <input
-                      className={s.editInput}
-                      name="startTime"
-                      type="time"
-                      defaultValue={entry.startTime ?? ""}
-                      aria-label="Время начала"
-                    />
+                    <label className={s.field}>
+                      <input
+                        className={s.editInput}
+                        name="startTime"
+                        type="time"
+                        defaultValue={entry.startTime ?? ""}
+                        aria-label="Время начала"
+                        placeholder="с"
+                      />
+                    </label>
 
-                    <input
-                      className={s.editInput}
-                      name="endTime"
-                      type="time"
-                      defaultValue={entry.endTime ?? ""}
-                      aria-label="Время завершения"
-                    />
+                    <label className={s.field}>
+                      <input
+                        className={s.editInput}
+                        name="endTime"
+                        type="time"
+                        defaultValue={entry.endTime ?? ""}
+                        aria-label="Время завершения"
+                        placeholder="до"
+                      />
+                    </label>
 
-                    <select
-                      className={s.editInput}
-                      name="category"
-                      defaultValue={entry.category}
-                      aria-label="Категория"
-                    >
-                      {CATEGORIES.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </select>
+                    <label className={s.field}>
+                      <select
+                        className={s.editInput}
+                        name="category"
+                        defaultValue={entry.category}
+                        aria-label="Категория"
+                      >
+                        {CATEGORIES.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                   </div>
 
                   <div className={s.editActions}>
@@ -233,7 +255,7 @@ export const EntriesList = ({
                 <div className={s.indicator} />
 
                 <div className={s.info}>
-                  <strong>{entry.activity}</strong>
+                  <strong>{entryLabel}</strong>
                   <div className={s.metaRow}>
                     <span>{category?.label ?? "Другое"}</span>
                     {entry.startTime || entry.endTime ? (
@@ -253,7 +275,7 @@ export const EntriesList = ({
                   <button
                     className={s.editButton}
                     onClick={() => setEditingId(entry.id)}
-                    aria-label={`Редактировать запись ${entry.activity}`}
+                    aria-label={`Редактировать запись ${entryLabel}`}
                     type="button"
                   >
                     ✎
@@ -261,8 +283,12 @@ export const EntriesList = ({
 
                   <button
                     className={s.deleteButton}
-                    onClick={() => onDelete(entry.id)}
-                    aria-label={`Удалить запись ${entry.activity}`}
+                    onClick={() => {
+                      if (window.confirm(`Удалить запись "${entryLabel}"?`)) {
+                        onDelete(entry.id);
+                      }
+                    }}
+                    aria-label={`Удалить запись ${entryLabel}`}
                     type="button"
                   >
                     ×

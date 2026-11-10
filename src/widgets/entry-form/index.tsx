@@ -276,7 +276,7 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
 
     const formData = new FormData(event.currentTarget);
 
-    const activity = String(formData.get("activity") ?? "").trim();
+    const rawActivity = String(formData.get("activity") ?? "").trim();
     const rawMinutes = Number(formData.get("minutes"));
     const category = String(
       formData.get("category") ?? selectedCategory,
@@ -295,9 +295,14 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
           ? rawMinutes
           : 0;
 
-    if (!activity || !date || minutes <= 0) {
+    if (!date || minutes <= 0) {
       return;
     }
+
+    const activity =
+      rawActivity ||
+      CATEGORIES.find((item) => item.id === category)?.label ||
+      "Активность";
 
     onSubmit(activity, minutes, category, date, startTime, endTime);
     event.currentTarget.reset();
@@ -314,7 +319,6 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
             type="text"
             placeholder="Что делал?"
             autoComplete="off"
-            required
           />
 
           <input

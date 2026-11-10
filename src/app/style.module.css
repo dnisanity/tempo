@@ -1,12 +1,20 @@
 .page {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .container {
   width: min(100% - 48px, 1080px);
   margin: 0 auto;
+}
+
+main.container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding-bottom: 10px;
 }
 
 .headerBar {
@@ -20,9 +28,9 @@
 }
 
 .footer {
-  margin-top: auto;
+  margin-top: 8px;
   border-top: 1px solid var(--border);
-  padding: 22px 0 32px;
+  padding: 18px 0 28px;
   color: #a0a8b1;
   font-size: 11px;
 }

@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 :root {
+  --font-ui: "DM Sans", "Segoe UI", sans-serif;
+  --font-display: "Manrope", "DM Sans", "Segoe UI", sans-serif;
   --background: #f7f8fa;
   --surface: #ffffff;
   --text: #20252d;
@@ -23,15 +25,35 @@ body {
 body {
   background: var(--background);
   color: var(--text);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-ui);
+  letter-spacing: -0.01em;
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+::placeholder {
+  font-family: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: #b3b9c3;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  opacity: 1;
 }

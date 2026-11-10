@@ -142,6 +142,22 @@ export const Dashboard = () => {
   const entriesCount = filteredActivities.length;
   const currentPeriodLabel = getPeriodLabel(period);
 
+  const previousPeriodWindow = useMemo(
+    () => getPeriodWindow(period, new Date(), -1),
+    [period],
+  );
+
+  const previousPeriodActivities = useMemo(
+    () =>
+      filterByRange(
+        activities,
+        previousPeriodWindow.start,
+        previousPeriodWindow.end,
+        selectedCategory === ALL_CATEGORY ? undefined : selectedCategory,
+      ),
+    [activities, previousPeriodWindow, selectedCategory],
+  );
+
   const categoryBreakdown = useMemo(() => {
     const totals = filteredActivities.reduce<Record<string, number>>(
       (acc, entry) => {
@@ -151,14 +167,28 @@ export const Dashboard = () => {
       {},
     );
 
-    return CATEGORIES.map((category) => ({
-      ...category,
-      minutes: totals[category.id] ?? 0,
-      share: totalMinutes ? (totals[category.id] ?? 0) / totalMinutes : 0,
-    }))
+    const previousTotals = previousPeriodActivities.reduce<
+      Record<string, number>
+    >((acc, entry) => {
+      acc[entry.category] = (acc[entry.category] ?? 0) + entry.minutes;
+      return acc;
+    }, {});
+
+    return CATEGORIES.map((category) => {
+      const minutes = totals[category.id] ?? 0;
+      const previousMinutes = previousTotals[category.id] ?? 0;
+      const delta = minutes - previousMinutes;
+
+      return {
+        ...category,
+        minutes,
+        share: totalMinutes ? minutes / totalMinutes : 0,
+        delta,
+      };
+    })
       .filter((category) => category.minutes > 0)
       .sort((left, right) => right.minutes - left.minutes);
-  }, [filteredActivities, totalMinutes]);
+  }, [filteredActivities, previousPeriodActivities, totalMinutes]);
 
   const categoryOrder = useMemo(
     () =>
@@ -174,30 +204,6 @@ export const Dashboard = () => {
         .map((category) => category.id),
     [currentPeriodActivities],
   );
-
-  const previousPeriodWindow = useMemo(
-    () => getPeriodWindow(period, new Date(), -1),
-    [period],
-  );
-
-  const previousPeriodMinutes = useMemo(
-    () =>
-      filterByRange(
-        activities,
-        previousPeriodWindow.start,
-        previousPeriodWindow.end,
-        selectedCategory === ALL_CATEGORY ? undefined : selectedCategory,
-      ).reduce((sum, entry) => sum + entry.minutes, 0),
-    [activities, previousPeriodWindow, selectedCategory],
-  );
-
-  const comparisonDelta = totalMinutes - previousPeriodMinutes;
-  const comparisonPercent =
-    previousPeriodMinutes > 0
-      ? (comparisonDelta / previousPeriodMinutes) * 100
-      : comparisonDelta > 0
-        ? 100
-        : 0;
 
   async function handleSubmit(
     activity: string,
@@ -294,8 +300,6 @@ export const Dashboard = () => {
         entriesCount={entriesCount}
         categoryBreakdown={categoryBreakdown}
         periodLabel={currentPeriodLabel}
-        comparisonDelta={comparisonDelta}
-        comparisonPercent={comparisonPercent}
       />
 
       <section className={s.contentGrid}>
