@@ -1,9 +1,11 @@
 .authWrap {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  min-height: 72vh;
-  padding: 28px 0 0;
+  width: 100%;
+  min-height: 100%;
+  padding: 8px 0 0;
+  transform: translateY(-150px);
 }
 
 .loadingCard {
@@ -15,7 +17,7 @@
   padding: 0;
   background: transparent;
   border: 0;
-  transform: translateY(-18px);
+  transform: none;
 }
 
 .loadingCard p {
