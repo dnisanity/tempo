@@ -79,15 +79,7 @@ export const Header = () => {
               Выйти
             </button>
           </div>
-        ) : (
-          <button
-            type="button"
-            className={s.loginButton}
-            onClick={handleLoginFocus}
-          >
-            Войти
-          </button>
-        )}
+        ) : null}
       </div>
     </header>
   );
