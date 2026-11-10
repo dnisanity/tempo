@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Header } from "../widgets";
 
+import "./globals.css";
 import s from "./style.module.css";
 
 export const metadata = {
@@ -15,16 +16,22 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="ru">
       <body>
-        <main className={s.container}>
-          <Header />
+        <div className={s.page}>
+          <header className={s.headerBar}>
+            <div className={s.container}>
+              <Header />
+            </div>
+          </header>
 
-          {children}
+          <main className={s.container}>{children}</main>
 
           <footer className={s.footer}>
-            <span>tempo</span>
-            <span>Твоё время — твой ресурс.</span>
+            <div className={s.container}>
+              <span>tempo</span>
+              <span>Твоё время — твой ресурс.</span>
+            </div>
           </footer>
-        </main>
+        </div>
       </body>
     </html>
   );

@@ -1,12 +1,23 @@
+import { formatDate, formatDuration } from "../../shared/utils";
 import s from "./style.module.css";
 
-export const Welcome = () => {
+interface Props {
+  periodLabel: string;
+  totalMinutes: number;
+}
+
+export const Welcome = ({ periodLabel, totalMinutes }: Props) => {
   return (
     <section className={s.welcome}>
-      <p className={s.eyebrow}>ТВОЙ ДЕНЬ</p>
-      <h1>Время под контролем.</h1>
+      <p className={s.eyebrow}>СВОДКА</p>
+
+      <div className={s.titleRow}>
+        <h1>{periodLabel}</h1>
+        <span className={s.pill}>{formatDuration(totalMinutes)}</span>
+      </div>
+
       <p className={s.description}>
-        Записывай, на что уходит время, и постепенно находи свой баланс.
+        {formatDate()} · меньше хаоса, больше контроля.
       </p>
     </section>
   );

@@ -1,6 +1,5 @@
-import { Dashboard } from "../widgets";
-import "./globals.css";
+import { AuthGate } from "../components/auth-gate";
 
 export default function Page() {
-  return <Dashboard />;
+  return <AuthGate />;
 }

@@ -1,152 +1,210 @@
 .panel {
   min-width: 0;
-  padding: 25px;
+  padding: 18px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-
-  @media (max-width: 700px) {
-    padding: 20px;
-  }
 }
 
 .heading {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
 .eyebrow {
-  margin: 0 0 7px;
+  margin: 0 0 4px;
   color: var(--accent);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
-.title {
+.heading h2 {
   margin: 0;
-  font-family: "Manrope", sans-serif;
-  font-size: 19px;
+  font-size: 18px;
   letter-spacing: -0.5px;
 }
 
 .count {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
   border-radius: 10px;
-  background: #f1f4f1;
-  color: var(--accent);
-  font-size: 13px;
+  background: #edf4ee;
+  color: var(--accent-dark);
+  font-size: 12px;
   font-weight: 700;
 }
 
 .emptyState {
-  min-height: 205px;
   display: flex;
+  min-height: 180px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  color: var(--muted);
 }
 
 .emptyIcon {
-  width: 44px;
-  height: 44px;
   display: grid;
   place-items: center;
-  margin-bottom: 12px;
-  border-radius: 14px;
-  background: #f3f5f3;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: #f4f5f5;
   color: var(--accent);
-  font-size: 25px;
+  font-size: 18px;
 }
 
 .emptyTitle {
-  margin: 0 0 7px;
+  margin: 0 0 6px;
   font-size: 14px;
-  font-weight: 600;
+  color: var(--text);
 }
 
 .emptyDescription {
-  max-width: 230px;
   margin: 0;
-  color: var(--muted);
+  max-width: 230px;
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .list {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 4px;
 }
 
 .item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 0;
+  gap: 10px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border);
+}
 
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    border-bottom: 0;
-  }
+.item:last-child {
+  border-bottom: 0;
 }
 
 .indicator {
   width: 8px;
   height: 8px;
-  flex-shrink: 0;
   border-radius: 50%;
   background: var(--accent);
+  flex-shrink: 0;
 }
 
 .info {
   min-width: 0;
-  display: flex;
   flex: 1;
+  display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+}
 
-  strong {
-    overflow: hidden;
-    font-size: 13px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.info strong {
+  overflow: hidden;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
-  span {
-    color: var(--muted);
-    font-size: 11px;
-  }
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.metaRow span:last-child {
+  opacity: 0.8;
 }
 
 .duration {
-  color: #596b5c;
+  color: var(--text);
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.deleteButton {
-  width: 25px;
-  height: 25px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: #a0a8b1;
-  font-size: 19px;
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
-  &:hover {
-    background: #f8eeee;
-    color: #c45c5c;
-  }
+.editButton,
+.deleteButton {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a3aab5;
+  font-size: 16px;
+}
+
+.editButton {
+  color: var(--muted);
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.editGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 8px;
+}
+
+.editInput {
+  width: 100%;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0 8px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.editActions {
+  display: flex;
+  gap: 8px;
+}
+
+.saveButton,
+.cancelButton {
+  border: 0;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.saveButton {
+  background: var(--accent);
+  color: white;
+}
+
+.cancelButton {
+  background: #f1f4f1;
+  color: var(--text);
 }
