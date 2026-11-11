@@ -401,7 +401,10 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
 
           <div className={s.timeRow}>
             <div className={s.timeRangeWrap}>
-              <div className={s.timeInputWrap}>
+              <div
+                className={`${s.timeInputWrap} ${startTimeValue ? s.filled : s.empty}`}
+                data-placeholder="с..."
+              >
                 <input
                   className={s.field}
                   name="startTime"
@@ -431,7 +434,10 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
 
               <span className={s.timeSeparator}>—</span>
 
-              <div className={s.timeInputWrap}>
+              <div
+                className={`${s.timeInputWrap} ${endTimeValue ? s.filled : s.empty}`}
+                data-placeholder="по..."
+              >
                 <input
                   className={s.field}
                   name="endTime"
