@@ -92,6 +92,11 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
   const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null);
   const [timerElapsedMs, setTimerElapsedMs] = useState(0);
   const [timerDisplayMs, setTimerDisplayMs] = useState(0);
+  const [activityValue, setActivityValue] = useState("");
+  const [minutesValue, setMinutesValue] = useState("");
+  const [startTimeValue, setStartTimeValue] = useState("");
+  const [endTimeValue, setEndTimeValue] = useState("");
+  const [hasTimeRange, setHasTimeRange] = useState(false);
 
   const orderedCategories =
     categoryOrder && categoryOrder.length > 0
@@ -112,12 +117,24 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
     }
   }, [orderedCategories, selectedCategory]);
 
+  function updateTimeRangeVisibility(
+    nextStartTime = startTimeValue,
+    nextEndTime = endTimeValue,
+  ) {
+    setHasTimeRange(Boolean(nextStartTime || nextEndTime));
+  }
+
   function resetFormState() {
     setSelectedCategory(orderedCategories[0]?.id ?? CATEGORIES[0].id);
     setTimerStatus("idle");
     setTimerStartedAt(null);
     setTimerElapsedMs(0);
     setTimerDisplayMs(0);
+    setActivityValue("");
+    setMinutesValue("");
+    setStartTimeValue("");
+    setEndTimeValue("");
+    setHasTimeRange(false);
 
     if (!formRef.current) {
       return;
@@ -146,28 +163,14 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
   }
 
   function resetTimeRange() {
-    if (!formRef.current) {
-      return;
-    }
-
-    const startInput = formRef.current.elements.namedItem(
-      "startTime",
-    ) as HTMLInputElement | null;
-    const endInput = formRef.current.elements.namedItem(
-      "endTime",
-    ) as HTMLInputElement | null;
-    const minutesInput = formRef.current.elements.namedItem(
-      "minutes",
-    ) as HTMLInputElement | null;
-
     setTimerStatus("idle");
     setTimerStartedAt(null);
     setTimerElapsedMs(0);
     setTimerDisplayMs(0);
-
-    if (startInput) startInput.value = "";
-    if (endInput) endInput.value = "";
-    if (minutesInput) minutesInput.value = "";
+    setStartTimeValue("");
+    setEndTimeValue("");
+    setMinutesValue("");
+    setHasTimeRange(false);
   }
 
   useEffect(() => {
@@ -229,9 +232,19 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
       setTimerElapsedMs(0);
       setTimerDisplayMs(0);
 
-      if (startInput) startInput.value = currentTime;
-      if (endInput) endInput.value = "";
-      if (minutesInput) minutesInput.value = "";
+      if (startInput) {
+        startInput.value = currentTime;
+        setStartTimeValue(currentTime);
+      }
+      if (endInput) {
+        endInput.value = "";
+        setEndTimeValue("");
+      }
+      if (minutesInput) {
+        minutesInput.value = "";
+        setMinutesValue("");
+      }
+      setHasTimeRange(Boolean(currentTime || endTimeValue));
       return;
     }
 
@@ -247,15 +260,24 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
       setTimerStartedAt(null);
 
       if (startInput) {
-        startInput.value =
+        const nextStartTime =
           startInput.value ||
           formatTimeInputValue(new Date(now - totalElapsed));
+        startInput.value = nextStartTime;
+        setStartTimeValue(nextStartTime);
       }
-      if (endInput) endInput.value = endValue;
-      if (minutesInput)
-        minutesInput.value = String(
+      if (endInput) {
+        endInput.value = endValue;
+        setEndTimeValue(endValue);
+      }
+      if (minutesInput) {
+        const nextMinutes = String(
           Math.max(1, Math.ceil(totalElapsed / 60000)),
         );
+        minutesInput.value = nextMinutes;
+        setMinutesValue(nextMinutes);
+      }
+      setHasTimeRange(Boolean(startTimeValue || endValue));
       return;
     }
 
@@ -264,11 +286,18 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
     setTimerStartedAt(now);
     setTimerDisplayMs(timerElapsedMs);
 
-    if (endInput) endInput.value = "";
-    if (minutesInput)
-      minutesInput.value = String(
+    if (endInput) {
+      endInput.value = "";
+      setEndTimeValue("");
+    }
+    if (minutesInput) {
+      const nextMinutes = String(
         Math.max(1, Math.round(timerElapsedMs / 60000)),
       );
+      minutesInput.value = nextMinutes;
+      setMinutesValue(nextMinutes);
+    }
+    setHasTimeRange(Boolean(startTimeValue || endTimeValue));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -313,31 +342,51 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
     <div className={s.panel}>
       <form ref={formRef} onSubmit={handleSubmit} className={s.form}>
         <div className={s.primaryRow}>
-          <input
-            className={s.field}
-            name="activity"
-            type="text"
-            placeholder="Что делал?"
-            autoComplete="off"
-          />
+          <div className={s.fieldWrap}>
+            <input
+              className={s.field}
+              name="activity"
+              type="text"
+              placeholder="Что делал?"
+              autoComplete="off"
+              value={activityValue}
+              onChange={(event) => setActivityValue(event.target.value)}
+            />
+            {activityValue ? (
+              <button
+                type="button"
+                className={s.clearInputButton}
+                onClick={() => setActivityValue("")}
+                aria-label="Очистить поле Что делал"
+              >
+                ×
+              </button>
+            ) : null}
+          </div>
 
-          <input
-            className={s.field}
-            name="minutes"
-            type="number"
-            min="1"
-            step="1"
-            placeholder="мин"
-            aria-label="Количество минут"
-          />
-
-          <button
-            type="submit"
-            className={s.submitButton}
-            aria-label="Добавить запись"
-          >
-            +
-          </button>
+          <div className={s.fieldWrap}>
+            <input
+              className={s.field}
+              name="minutes"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="мин"
+              aria-label="Количество минут"
+              value={minutesValue}
+              onChange={(event) => setMinutesValue(event.target.value)}
+            />
+            {minutesValue ? (
+              <button
+                type="button"
+                className={s.clearInputButton}
+                onClick={() => setMinutesValue("")}
+                aria-label="Очистить поле минут"
+              >
+                ×
+              </button>
+            ) : null}
+          </div>
         </div>
 
         <div className={s.secondaryRow}>
@@ -352,30 +401,63 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
 
           <div className={s.timeRow}>
             <div className={s.timeRangeWrap}>
-              <input
-                className={s.field}
-                name="startTime"
-                type="time"
-                aria-label="Время начала"
-              />
+              <div className={s.timeInputWrap}>
+                <input
+                  className={s.field}
+                  name="startTime"
+                  type="time"
+                  aria-label="Время начала"
+                  value={startTimeValue}
+                  onChange={(event) => {
+                    const nextValue = event.target.value;
+                    setStartTimeValue(nextValue);
+                    updateTimeRangeVisibility(nextValue, endTimeValue);
+                  }}
+                />
+                {startTimeValue ? (
+                  <button
+                    type="button"
+                    className={s.clearInputButton}
+                    onClick={() => {
+                      setStartTimeValue("");
+                      setHasTimeRange(Boolean(endTimeValue));
+                    }}
+                    aria-label="Очистить время начала"
+                  >
+                    ×
+                  </button>
+                ) : null}
+              </div>
 
               <span className={s.timeSeparator}>—</span>
 
-              <input
-                className={s.field}
-                name="endTime"
-                type="time"
-                aria-label="Время завершения"
-              />
-
-              <button
-                type="button"
-                className={s.resetTimeButton}
-                onClick={resetTimeRange}
-                aria-label="Сбросить время"
-              >
-                ×
-              </button>
+              <div className={s.timeInputWrap}>
+                <input
+                  className={s.field}
+                  name="endTime"
+                  type="time"
+                  aria-label="Время завершения"
+                  value={endTimeValue}
+                  onChange={(event) => {
+                    const nextValue = event.target.value;
+                    setEndTimeValue(nextValue);
+                    updateTimeRangeVisibility(startTimeValue, nextValue);
+                  }}
+                />
+                {endTimeValue ? (
+                  <button
+                    type="button"
+                    className={s.clearInputButton}
+                    onClick={() => {
+                      setEndTimeValue("");
+                      setHasTimeRange(Boolean(startTimeValue));
+                    }}
+                    aria-label="Очистить время завершения"
+                  >
+                    ×
+                  </button>
+                ) : null}
+              </div>
             </div>
 
             {timerStatus !== "idle" ? (
@@ -385,7 +467,33 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
                   className={s.timerButton}
                   onClick={handleTimerToggle}
                 >
-                  {timerStatus === "running" ? "Пауза" : "Прод."}
+                  {timerStatus === "running" ? "Пауза" : "Продолжить"}
+                </button>
+                <button
+                  type="button"
+                  className={s.timerResetButton}
+                  onClick={() => {
+                    setTimerStatus("idle");
+                    setTimerStartedAt(null);
+                    setTimerElapsedMs(0);
+                    setTimerDisplayMs(0);
+                    setStartTimeValue("");
+                    setEndTimeValue("");
+                    setHasTimeRange(false);
+                    if (formRef.current) {
+                      const startInput = formRef.current.elements.namedItem(
+                        "startTime",
+                      ) as HTMLInputElement | null;
+                      const endInput = formRef.current.elements.namedItem(
+                        "endTime",
+                      ) as HTMLInputElement | null;
+                      if (startInput) startInput.value = "";
+                      if (endInput) endInput.value = "";
+                    }
+                  }}
+                  aria-label="Сбросить таймер"
+                >
+                  ×
                 </button>
                 <span className={s.timerStatus}>
                   {formatTimerLength(timerDisplayMs)}
@@ -416,6 +524,16 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
               {category.label}
             </button>
           ))}
+        </div>
+
+        <div className={s.actionRow}>
+          <button
+            type="submit"
+            className={s.submitButton}
+            aria-label="Добавить запись"
+          >
+            Добавить
+          </button>
         </div>
       </form>
     </div>

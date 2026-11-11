@@ -19,11 +19,11 @@
 }
 
 .primaryRow {
-  grid-template-columns: minmax(0, 1.7fr) 82px 42px;
+  grid-template-columns: minmax(0, 1.7fr) 82px;
 }
 
 .secondaryRow {
-  grid-template-columns: 132px minmax(0, 1fr);
+  grid-template-columns: 200px minmax(0, 1fr);
   align-items: stretch;
 }
 
@@ -36,9 +36,9 @@
 
 .timeRangeWrap {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 24px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .timeSeparator {
@@ -47,15 +47,41 @@
   text-align: center;
 }
 
-.resetTimeButton {
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--muted);
+.fieldWrap,
+.timeInputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.fieldWrap .field,
+.timeInputWrap .field {
+  padding-right: 10px;
+}
+
+.clearInputButton {
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(78, 88, 98, 0.7);
   font-size: 16px;
   line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearInputButton:hover {
+  color: var(--text);
 }
 
 .timerWrap {
@@ -63,7 +89,33 @@
   align-items: center;
   gap: 6px;
   min-width: 0;
-  justify-content: flex-end;
+  justify-content: stretch;
+  width: 100%;
+}
+
+.timerButton {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  background: rgba(100, 124, 104, 0.08);
+  color: var(--text);
+  border: 1px solid rgba(100, 124, 104, 0.2);
+  font-weight: 600;
+}
+
+.timerResetButton {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .timerStatus {
@@ -80,7 +132,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .categoryButton {
@@ -112,6 +164,19 @@
   font-weight: 500;
   line-height: 1.2;
   outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.field[type="time"] {
+  padding-right: 22px;
+  color-scheme: light;
+}
+
+.field[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0.7;
+  cursor: pointer;
+  filter: grayscale(1);
 }
 
 .field:focus {
@@ -125,23 +190,43 @@
   font-weight: 500;
 }
 
+.actionRow {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .submitButton,
 .timerButton {
-  width: 42px;
-  height: 36px;
-  border: 0;
+  height: 34px;
   border-radius: 10px;
-  background: var(--accent);
-  color: white;
   font-size: 11px;
   line-height: 1;
   font-weight: 600;
 }
 
+.submitButton {
+  border: 0;
+  background: var(--accent);
+  color: white;
+}
+
+.submitButton {
+  width: 100%;
+  min-height: 34px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  opacity: 0.98;
+}
+
 .timerButton {
-  width: 58px;
+  width: 100%;
   min-width: 58px;
   padding: 0 8px;
+  border: 1px solid rgba(100, 124, 104, 0.2);
+  background: rgba(100, 124, 104, 0.08);
+  color: var(--text);
 }
 
 @media (max-width: 600px) {
@@ -150,7 +235,17 @@
   }
 
   .primaryRow {
-    grid-template-columns: 1fr 74px 42px;
+    grid-template-columns: 1fr 74px;
+  }
+
+  .actionRow {
+    width: 100%;
+  }
+
+  .submitButton {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
   }
 
   .secondaryRow {
@@ -162,34 +257,60 @@
   }
 
   .timeRangeWrap {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 24px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    max-width: none;
+    margin-left: 0;
   }
 }
 
 @media (max-width: 440px) {
-  .primaryRow,
+  .form {
+    gap: 8px;
+  }
+
+  .primaryRow {
+    grid-template-columns: minmax(0, 1fr) 74px 42px;
+  }
+
   .secondaryRow {
     grid-template-columns: 1fr;
   }
 
   .timeRow {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .timeRangeWrap {
-    grid-template-columns: 1fr 16px 1fr 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .timeInputWrap,
+  .timeRangeWrap input {
+    width: 100%;
   }
 
   .timeSeparator {
     display: none;
   }
 
-  .submitButton,
+  .clearInputButton {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+
   .timerButton {
     width: 100%;
+    flex: 1 1 auto;
   }
 
   .timerWrap {
+    width: 100%;
     justify-content: space-between;
   }
 }
