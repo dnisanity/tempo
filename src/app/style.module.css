@@ -3,11 +3,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  max-width: 100vw;
 }
 
 .container {
   width: min(100% - 48px, 1080px);
   margin: 0 auto;
+  max-width: 100%;
 }
 
 main.container {
@@ -31,6 +33,7 @@ main.container {
   display: flex;
   align-items: center;
   min-height: 76px;
+  min-width: 0;
 }
 
 .footer {
@@ -54,7 +57,14 @@ main.container {
 
 @media (max-width: 700px) {
   .container {
-    width: min(100% - 32px, 520px);
+    width: min(100% - 22px, 520px);
+    max-width: calc(100vw - 22px);
+  }
+
+  .headerBar .container {
+    min-height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 
   .footer .container {

@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  min-width: 0;
 }
 
 .logo {
@@ -35,6 +36,7 @@
   align-items: center;
   gap: 14px;
   margin-left: auto;
+  min-width: 0;
 }
 
 .date {
@@ -75,4 +77,13 @@
 
 .loginButton {
   background: rgba(100, 124, 104, 0.06);
+}
+
+@media (max-width: 720px) {
+  .logo {
+    font-size: 0;
+    width: 30px;
+    min-width: 30px;
+    overflow: hidden;
+  }
 }
