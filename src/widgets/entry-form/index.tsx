@@ -436,7 +436,7 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
 
               <div
                 className={`${s.timeInputWrap} ${endTimeValue ? s.filled : s.empty}`}
-                data-placeholder="по..."
+                data-placeholder="до..."
               >
                 <input
                   className={s.field}
