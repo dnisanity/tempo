@@ -269,7 +269,7 @@
   }
 
   .primaryRow {
-    grid-template-columns: minmax(0, 1fr) 74px 42px;
+    grid-template-columns: minmax(0, 1fr) 74px;
   }
 
   .secondaryRow {
