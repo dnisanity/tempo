@@ -511,7 +511,7 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
                 className={s.timerButton}
                 onClick={handleTimerToggle}
               >
-                Старт
+                Таймер
               </button>
             )}
           </div>
