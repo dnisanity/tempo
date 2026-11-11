@@ -124,6 +124,23 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
     setHasTimeRange(Boolean(nextStartTime || nextEndTime));
   }
 
+  function syncMinutesFromRange(
+    nextStartTime = startTimeValue,
+    nextEndTime = endTimeValue,
+  ) {
+    if (!nextStartTime || !nextEndTime) {
+      setMinutesValue("");
+      return;
+    }
+
+    const rangeMinutes = getMinutesFromRange(nextStartTime, nextEndTime);
+    if (rangeMinutes === null) {
+      return;
+    }
+
+    setMinutesValue(String(Math.max(1, rangeMinutes)));
+  }
+
   function resetFormState() {
     setSelectedCategory(orderedCategories[0]?.id ?? CATEGORIES[0].id);
     setTimerStatus("idle");
@@ -413,8 +430,17 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
                   value={startTimeValue}
                   onChange={(event) => {
                     const nextValue = event.target.value;
+                    const nextEndValue =
+                      event.currentTarget.form?.elements.namedItem(
+                        "endTime",
+                      ) as HTMLInputElement | null;
+
                     setStartTimeValue(nextValue);
-                    updateTimeRangeVisibility(nextValue, endTimeValue);
+                    updateTimeRangeVisibility(
+                      nextValue,
+                      nextEndValue?.value ?? "",
+                    );
+                    syncMinutesFromRange(nextValue, nextEndValue?.value ?? "");
                   }}
                 />
                 {startTimeValue ? (
@@ -446,8 +472,20 @@ export const EntryForm = ({ categoryOrder, onSubmit }: Props) => {
                   value={endTimeValue}
                   onChange={(event) => {
                     const nextValue = event.target.value;
+                    const nextStartValue =
+                      event.currentTarget.form?.elements.namedItem(
+                        "startTime",
+                      ) as HTMLInputElement | null;
+
                     setEndTimeValue(nextValue);
-                    updateTimeRangeVisibility(startTimeValue, nextValue);
+                    updateTimeRangeVisibility(
+                      nextStartValue?.value ?? "",
+                      nextValue,
+                    );
+                    syncMinutesFromRange(
+                      nextStartValue?.value ?? "",
+                      nextValue,
+                    );
                   }}
                 />
                 {endTimeValue ? (
